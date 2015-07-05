@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CryptNoob</string>
+
+    <string name="title_section1">Groovy Test</string>
+    <string name="title_section2">NFC Initiate</string>
+    <string name="title_section3">NFC Respond</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
