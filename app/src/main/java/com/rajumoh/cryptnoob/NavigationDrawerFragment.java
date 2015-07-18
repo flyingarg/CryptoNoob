@@ -58,6 +58,9 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    /**
+     * Mandatory.
+     */
     public NavigationDrawerFragment() {
     }
 
