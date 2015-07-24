@@ -1,14 +1,27 @@
 <resources>
     <string name="app_name">CryptNoob</string>
 
+    <!-- String related to fragment_1 -->
     <string name="title_section1">Groovy Test</string>
+        <string name="s_algo_code">Algorithm Code</string>
+        <string name="s_test_string">Test String</string>
+        <string name="s_run_test">Run Test</string>
+        <string name="s_algo_save_hint">Write your Algo and Save</string>
+        <string name="s_test_text">Test Text</string>
+        <string name="s_test_text_hint">Enter Test Text to check Algo validity</string>
+
+    <!-- Strings related to fragment_2 -->
     <string name="title_section2">NFC Initiate</string>
+
+    <!-- Strings related to fragment_3 -->
     <string name="title_section3">NFC Respond</string>
+
+    <!-- Some common Strings -->
+    <string name="s_save">Save</string>
+    <string name="s_save_and_run_test">Save and Run Tests</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_example">Example action</string>
-
     <string name="action_settings">Settings</string>
 </resources>

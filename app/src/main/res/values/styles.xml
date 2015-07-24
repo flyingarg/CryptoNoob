@@ -1,8 +1,51 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowTitleBackgroundStyle">@style/titleStyle</item>
+        <item name="android:windowTitleStyle">@style/titleStyle</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:label">@string/title_section3</item>
     </style>
 
+    <!-- May be add a custom font here -->
+    <style name="boldTextStyle" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/color1</item>
+    </style>
+
+    <style name="buttonStyle" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/color2</item>
+        <item name="android:background">@color/color3</item>
+    </style>
+
+    <style name="pageStyle" >
+        <item name="android:background">@color/color4</item>
+    </style>
+
+    <style name="textAreaStyle" >
+        <item name="android:background">@color/color5</item>
+    </style>
+
+    <style name="titleStyle">
+        <item name="android:background">@color/color4</item>
+        <item name="android:textColor">@color/color4</item>
+    </style>
+
+    <color name="color1">#070C1E</color>
+    <color name="color2">#191F21</color>
+    <color name="color3">#596869</color>
+    <color name="color4">#C2C1A5</color>
+    <color name="color5">#AAADA2</color>
 </resources>
+
+
+<!--
+Whitish - #BD1E1E
+Color 2 - #D88373
+Color 3 -  #F5E2C8
+Color 4 - #070C1E
+Color 5 - #18206F
+-->
