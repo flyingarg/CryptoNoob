@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CryptNoob</string>
+    <string name="app_name">CryptoNoob</string>
 
     <!-- String related to fragment_1 -->
     <string name="title_section1">Groovy Test</string>
@@ -24,4 +24,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_nfc_key_receiver">NfcKeyReceiver</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
