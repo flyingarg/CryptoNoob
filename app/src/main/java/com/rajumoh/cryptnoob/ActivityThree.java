@@ -1,6 +1,10 @@
 package com.rajumoh.cryptnoob;
 
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 
 public class ActivityThree extends BaseActivity {
@@ -24,4 +28,19 @@ public class ActivityThree extends BaseActivity {
         super.onNavigationDrawerItemSelected(position);
     }
 
+    public void onResume() {
+        super.onResume();
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                NdefMessage[] msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
+                    NdefRecord[] record = msgs[i].getRecords();
+                    Log.i("rajumoh", "Records id : " + record[i].getId());
+                    Log.i("rajumoh", "Record payload : " + record[i].getPayload().toString());
+                }
+            }
+        }
+    }
 }

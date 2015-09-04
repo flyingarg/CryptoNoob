@@ -2,6 +2,9 @@ package com.rajumoh.cryptnoob;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BaseActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -67,12 +72,26 @@ public class BaseActivity extends ActionBarActivity implements NavigationDrawerF
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             int section = this.getArguments().getInt(ARG_SECTION_NUMBER);
             if ( section == 1){
+                //TODO : Need Groovy code up again.
                 final View rootView = inflater.inflate(R.layout.fragment_1, container, false);
                 return rootView;
             }else if( section == 2){
                 final View rootView = inflater.inflate(R.layout.fragment_2, container, false);
                 TextView temp = (TextView)rootView.findViewById(R.id.section_label);
                 temp.setText("Fragment Two");
+                Button button = (Button)rootView.findViewById(R.id.nfc_resp);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        byte[] data = "253".getBytes();
+                        NdefRecord record = NdefRecord.createMime("text/plain", data);
+                        //TODO : Would need to also have the code be able to send the algorithms.
+                        NdefMessage message = new NdefMessage(record);
+                        NfcAdapter.getDefaultAdapter(getActivity().getApplicationContext()).setNdefPushMessage(message, getActivity());
+                        Log.i("rajumoh", "Active to send NdefMessage......");
+                        Toast.makeText(getActivity().getApplicationContext(), "Well It now seems to be ready send message", Toast.LENGTH_LONG);
+                    }
+                });
                 return rootView;
             }else {
                 final View rootView = inflater.inflate(R.layout.fragment_3, container, false);

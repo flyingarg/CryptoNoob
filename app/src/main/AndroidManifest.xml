@@ -3,10 +3,12 @@
     package="com.rajumoh.cryptnoob" >
 
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
+
 
     <application
         android:allowBackup="true"
@@ -43,7 +45,11 @@
                     android:scheme="vnd.android.nfc" />
             </intent-filter>
         </activity>
-
+        <receiver android:name="com.rajumoh.cryptnoob.SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
