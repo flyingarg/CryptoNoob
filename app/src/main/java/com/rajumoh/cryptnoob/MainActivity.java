@@ -2,6 +2,9 @@ package com.rajumoh.cryptnoob;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class MainActivity extends BaseActivity{
 
@@ -24,4 +27,9 @@ public class MainActivity extends BaseActivity{
         super.onNavigationDrawerItemSelected(position);
     }
 
+    @Override
+    public View createRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //TODO : Need Groovy code up again.
+        return (View)inflater.inflate(R.layout.fragment_1, container, false);
+    }
 }

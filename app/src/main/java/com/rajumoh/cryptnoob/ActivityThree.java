@@ -6,6 +6,10 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class ActivityThree extends BaseActivity {
 
@@ -43,4 +47,13 @@ public class ActivityThree extends BaseActivity {
             }
         }
     }
+
+    @Override
+    public View createRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView =  (View)inflater.inflate(R.layout.fragment_3, container, false);
+        TextView temp = (TextView)rootView.findViewById(R.id.section_label);
+        temp.setText("Fragment Three");
+        return rootView;
+    }
+
 }
