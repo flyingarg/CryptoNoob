@@ -1,6 +1,7 @@
 package com.rajumoh.cryptnoob;
 
-import android.app.Activity;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -40,25 +41,33 @@ public class ActivityTwo extends BaseActivity {
         TextView temp = (TextView)rootView.findViewById(R.id.section_label);
         temp.setText("Fragment Two");
         Button button = (Button)rootView.findViewById(R.id.nfc_init);
-        button.setOnClickListener(new MyOnclickListener(this));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                byte[] data = "253".getBytes();
+                byte[] algoData = getAlgoFromDb().getBytes();
+                NdefRecord keyRecord = NdefRecord.createExternal("com.rajumoh.cryptnoob", "externaltype", data);
+                NdefRecord algoRecord = NdefRecord.createMime("text/plain", algoData);
+                NdefMessage message = new NdefMessage(new NdefRecord[]{keyRecord, algoRecord});
+                NfcAdapter.getDefaultAdapter(getApplicationContext()).setNdefPushMessage(message, ActivityTwo.this);
+                Log.i("rajumoh", "Active to send NdefMessage......");
+                Toast.makeText(getApplicationContext(), "Well It now seems to be ready send message", Toast.LENGTH_LONG).show();
+            }
+        });
         return rootView;
     }
 
-    class MyOnclickListener implements View.OnClickListener{
-        private Activity activity;
-        public MyOnclickListener(Activity activity){
-            this.activity = activity;
-        }
-        @Override
-        public void onClick(View view) {
-            byte[] data = "253".getBytes();
-            NdefRecord record = NdefRecord.createExternal("com.rajumoh.cryptonoob","encryptedKey", data);
-            //TODO : Would need to also have the code be able to send the algorithms.
-            NdefMessage message = new NdefMessage(record);
-            NfcAdapter.getDefaultAdapter(getApplicationContext()).setNdefPushMessage(message, activity);
-            Log.i("rajumoh", "Active to send NdefMessage......");
-            Toast.makeText(getApplicationContext(), "Well It now seems to be ready send message", Toast.LENGTH_LONG).show();
-        }
+    @Override
+    public void onNewIntent(Intent intent) {
+        Log.i("rajumoh", "Intent invoked");
+        Log.i("rajumoh", "" + NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction()));
+        setIntent(intent);
+    }
 
+    //TODO : The Other database Entry
+    private String getAlgoFromDb(){
+        SqlDbHelper dbHelper = new SqlDbHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        return "";
     }
 }

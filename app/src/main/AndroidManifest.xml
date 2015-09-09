@@ -25,24 +25,19 @@
         </activity>
         <activity android:name=".ActivityTwo"
                   android:label="@string/app_name">
-                  <intent-filter>
+                  <!-- <intent-filter>
                       <action android:name="com.rajumoh.cryptnoob.ACTIVITY_TWO"/>
                       <category android:name="android.intent.category.DEFAULT"/>
-                  </intent-filter>
+                  </intent-filter> -->
         </activity>
         <activity android:name=".ActivityThree"
                   android:label="@string/app_name">
             <intent-filter>
-                <action android:name="com.rajumoh.cryptnoob.ACTIVITY_THREE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="ext"
-                    android:pathPrefix="/com.rajumoh.cryptonoob:encryptedKey"
-                    android:scheme="vnd.android.nfc" />
+				<category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="vnd.android.nfc"
+                      android:host="ext"
+                      android:pathPrefix="/com.rajumoh.cryptnoob:externaltype" />
             </intent-filter>
         </activity>
         <receiver android:name="com.rajumoh.cryptnoob.SmsReceiver">

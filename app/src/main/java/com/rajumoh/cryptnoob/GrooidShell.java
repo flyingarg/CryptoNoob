@@ -77,13 +77,13 @@ public class GrooidShell {
         });
 
         GrooidClassLoader gcl = new GrooidClassLoader(this.classLoader, config);
-        try {
+        try {//slow step
             gcl.parseClass(scriptText);
         }  catch (Throwable e) {
             Log.e("GrooidShell","Dynamic loading failed!",e);
         }
         byte[] dalvikBytecode = new byte[0];
-        try {
+        try {//slow step
             dalvikBytecode = dexFile.toDex(new OutputStreamWriter(new ByteArrayOutputStream()), false);
         } catch (IOException e) {
             Log.e("GrooidShell", "Unable to convert to Dalvik", e);
@@ -97,7 +97,7 @@ public class GrooidShell {
             if (Script.class.isAssignableFrom(scriptClass)) {
                 sd = System.nanoTime();
                 Script script = null;
-                try {
+                try {//Slow step
                     script = (Script) scriptClass.newInstance();
                 } catch (InstantiationException e) {
                     Log.e("GroovyDroidShell", "Unable to create script",e);

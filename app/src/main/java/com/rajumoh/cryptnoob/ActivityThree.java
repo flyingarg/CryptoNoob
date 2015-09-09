@@ -1,5 +1,6 @@
 package com.rajumoh.cryptnoob;
 
+import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -33,6 +34,7 @@ public class ActivityThree extends BaseActivity {
     }
 
     public void onResume() {
+        Log.i("rajumoh","onResume");
         super.onResume();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -49,8 +51,15 @@ public class ActivityThree extends BaseActivity {
     }
 
     @Override
+    public void onNewIntent(Intent intent) {
+        Log.i("rajumoh", "Intent invoked");
+        Log.i("rajumoh",""+NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction()));
+        setIntent(intent);
+    }
+
+    @Override
     public View createRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  (View)inflater.inflate(R.layout.fragment_3, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_3, container, false);
         TextView temp = (TextView)rootView.findViewById(R.id.section_label);
         temp.setText("Fragment Three");
         return rootView;
