@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import com.rajumoh.cryptnoob.databases.DatabaseUtils;
+import com.rajumoh.cryptnoob.grooid.GrooidShell;
+
 /**
  * Created by rajumoh on 9/4/15.
  */
@@ -26,10 +29,13 @@ public class SmsReceiver extends BroadcastReceiver {
                 str += "\n";
             }
         }
-
-/*        if(contactId != -1){
-            Log.i("rajumoh", "Contact id : " + contactId);
-        }*/
+        if(str.startsWith("~~")){
+            String encDecTest = "decryptTest(encryptTest(testString));\n";
+            GrooidShell shell = new GrooidShell(context.getDir("dynclasses", 0), this.getClass().getClassLoader());
+            //TODO : Create an alert, or a better way to display message.
+            /*http://developer.android.com/guide/topics/ui/dialogs.html*/
+            String decryptedText = shell.evaluate(DatabaseUtils.getAlgoFromDb(null, context)+"\ntestString = \""+ str.substring(1)+"\"\n"+encDecTest).getResult();
+        }
     }
 
     public static SmsMessage[] getMessagesFromIntent(Intent intent) {

@@ -1,4 +1,4 @@
-package com.rajumoh.cryptnoob;
+package com.rajumoh.cryptnoob.databases;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +14,7 @@ public class SqlDbHelper extends SQLiteOpenHelper{
     private static final String SQL_CREATE_TABLE = "CREATE TABLE " +
             SqlStore.AlgoStore.TABLE_NAME + " ( " +
             SqlStore.AlgoStore.ALGO_ID + " INTEGER PRIMARY KEY, " +
-            SqlStore.AlgoStore.CONTACT_NAME + " TEXT, "+
+            SqlStore.AlgoStore.CONTACT_NAME + " TEXT UNIQUE, "+
             SqlStore.AlgoStore.ALGO + " TEXT )";
 
     private static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + SqlStore.AlgoStore.TABLE_NAME;

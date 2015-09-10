@@ -1,4 +1,4 @@
-package com.rajumoh.cryptnoob;
+package com.rajumoh.cryptnoob.grooid;
 
 /**
  * Created by rajumoh on 30.7.2015.

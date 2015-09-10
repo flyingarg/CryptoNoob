@@ -1,6 +1,7 @@
 package com.rajumoh.cryptnoob;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.rajumoh.cryptnoob.databases.DatabaseUtils;
+import com.rajumoh.cryptnoob.grooid.GrooidShell;
 
 public class MainActivity extends BaseActivity{
 
@@ -28,6 +32,7 @@ public class MainActivity extends BaseActivity{
             " }\n" +
             " return response;\n" +
             "}\n";
+    private String tempStoreAlgo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +58,14 @@ public class MainActivity extends BaseActivity{
         final View rootView = inflater.inflate(R.layout.fragment_1, container, false);
         EditText algoSave = (EditText)rootView.findViewById(R.id.algo_save);
         EditText testTextSave = (EditText)rootView.findViewById(R.id.test_text_save);
-        if(noEntryInDb()) {
-            algoSave.setText(DEFAULT_ALGO);
+        if(DatabaseUtils.isEntryAvailable(getApplicationContext())) {
+            tempStoreAlgo = DatabaseUtils.getAlgoFromDb(null, getApplicationContext());
+            algoSave.setText(tempStoreAlgo);
+
         }else{
-            algoSave.setText(getAlgoFromDb());
+            tempStoreAlgo = DEFAULT_ALGO;
+            algoSave.setText(tempStoreAlgo);
+            DatabaseUtils.insertAlgoToDb(null, tempStoreAlgo, getApplicationContext());
         }
         testTextSave.setText("Test plain text");
         Button runTest = (Button)rootView.findViewById(R.id.run_test);
@@ -73,32 +82,26 @@ public class MainActivity extends BaseActivity{
                 //Log.i("rajumoh", "Evaluating EncDecTest : " + shell.evaluate(algoSave.getText()+"\ntestString = \""+testTextSave.getText()+"\"\n"+encDecTest).getResult());
                 String response = shell.evaluate(algoSave.getText() + "\ntestString = \"" + testTextSave.getText() + "\"\n" + encDecTest).getResult();
                 if (response.equals(testTextSave.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Test Success.", Toast.LENGTH_LONG).show();
-                    setAlgoToDb(algoSave.getText().toString());
+                    //TODO : Test the clipbard code.
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("message", shell.evaluate(algoSave.getText() + "\ntestString = \"" + testTextSave.getText() + "\"\n" + encryptTest).getResult());
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getApplicationContext(), "Test Success.Message copied to clipboard", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Test Failed. Your Crypt does not seem to be working", Toast.LENGTH_LONG).show();
+                }
+
+                if(!tempStoreAlgo.equals(algoSave.getText().toString())) {
+                    Log.i("rajumoh", "There was some change in the algo, saving new algo");
+                    if(DatabaseUtils.updateAlgoToDb(null, algoSave.getText().toString(), getApplicationContext()))
+                        Log.i("rajumoh", "Algo Successfully saved");
+                    else
+                        Log.e("rajumoh", "Failed to save the algo to database.");
+
                 }
             }
         });
         return rootView;
     }
 
-    //TODO : Complete the rest of the database.
-    private boolean noEntryInDb(){
-        SqlDbHelper dbHelper = new SqlDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return false;
-    }
-
-    private String getAlgoFromDb(){
-        SqlDbHelper dbHelper = new SqlDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return "";
-    }
-
-    private boolean setAlgoToDb(String data){
-        SqlDbHelper dbHelper = new SqlDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return true;
-    }
 }

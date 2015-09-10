@@ -1,7 +1,6 @@
 package com.rajumoh.cryptnoob;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.rajumoh.cryptnoob.databases.DatabaseUtils;
 
 public class ActivityTwo extends BaseActivity {
 
@@ -45,7 +46,7 @@ public class ActivityTwo extends BaseActivity {
             @Override
             public void onClick(View view) {
                 byte[] data = "253".getBytes();
-                byte[] algoData = getAlgoFromDb().getBytes();
+                byte[] algoData = DatabaseUtils.getAlgoFromDb(null, getApplicationContext()).getBytes();
                 NdefRecord keyRecord = NdefRecord.createExternal("com.rajumoh.cryptnoob", "externaltype", data);
                 NdefRecord algoRecord = NdefRecord.createMime("text/plain", algoData);
                 NdefMessage message = new NdefMessage(new NdefRecord[]{keyRecord, algoRecord});
@@ -64,10 +65,4 @@ public class ActivityTwo extends BaseActivity {
         setIntent(intent);
     }
 
-    //TODO : The Other database Entry
-    private String getAlgoFromDb(){
-        SqlDbHelper dbHelper = new SqlDbHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return "";
-    }
 }

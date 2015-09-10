@@ -127,4 +127,5 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
     }
 
     public abstract View createRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+
 }

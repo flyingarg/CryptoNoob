@@ -1,4 +1,4 @@
-package com.rajumoh.cryptnoob;
+package com.rajumoh.cryptnoob.grooid;
 
 import android.util.Log;
 
@@ -33,7 +33,8 @@ import dalvik.system.DexClassLoader;
 import groovy.lang.Script;
 
 /**
- * Created by rajumoh on 30.7.2015.
+ * Thanks to Cédric Champeau aka melix from github.
+ * @author Cédric Champeau
  */
 public class GrooidShell {
     private static final String DEX_IN_JAR_NAME = "classes.dex";

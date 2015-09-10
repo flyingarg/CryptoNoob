@@ -1,4 +1,4 @@
-package com.rajumoh.cryptnoob;
+package com.rajumoh.cryptnoob.databases;
 
 import android.provider.BaseColumns;
 
@@ -13,7 +13,7 @@ public final class SqlStore {
     public static abstract class AlgoStore implements BaseColumns{
         public static final String TABLE_NAME = "algostore";
         public static final String ALGO_ID = "algoid";
-        public static final String CONTACT_NAME = "algo_for_contact";
+        public static final String CONTACT_NAME = "algo_contact";
         public static final String ALGO = "algo";
     }
 }
