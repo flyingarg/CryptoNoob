@@ -40,6 +40,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
             Log.i("rajumoh", "Switching to ActivityThree");
             intent = new Intent(this, ActivityThree.class);
             this.startActivity(intent);
+        }else if(position == 3 && !(this instanceof ActivityFour)){
+            Log.i("rajumoh", "Switching to ActivityFour");
+            intent = new Intent(this, ActivityFour.class);
+            this.startActivity(intent);
         }else {
             Log.i("rajumoh", "Commit Fragment to position : " + position);
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -70,6 +74,8 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
             if ( section == 1){
                 return baseActivity.createRootView(inflater, container, savedInstanceState);//inflater.inflate(R.layout.fragment_1, container, false);
             }else if( section == 2){
+                return baseActivity.createRootView(inflater, container, savedInstanceState);/*inflater.inflate(R.layout.fragment_2, container, false);*/
+            }else if( section == 3){
                 return baseActivity.createRootView(inflater, container, savedInstanceState);/*inflater.inflate(R.layout.fragment_2, container, false);*/
             }else {
                 return baseActivity.createRootView(inflater, container, savedInstanceState);/*inflater.inflate(R.layout.fragment_3, container, false);*/
@@ -103,6 +109,9 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_section4);
                 break;
         }
     }

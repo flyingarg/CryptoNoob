@@ -16,22 +16,6 @@ import com.rajumoh.cryptnoob.grooid.GrooidShell;
 
 public class MainActivity extends BaseActivity{
 
-    private static final String DEFAULT_ALGO =
-            "public encryptTest(plainText){\n" +
-            " String response = \"\";\n" +
-            " for(int i=0; i<plainText.length(); i++){\n" +
-            "  response += (char)((((int)plainText.charAt(i))+21)%254);\n" +
-            " }\n" +
-            " return response;\n" +
-            "}\n" +
-            "\n" +
-            "public decryptTest(encString){\n" +
-            " String response = \"\";\n" +
-            " for(int i=0; i<encString.length(); i++){\n" +
-            "  response += (char)((((int)encString.charAt(i))+233)%254);\n" +
-            " }\n" +
-            " return response;\n" +
-            "}\n";
     private String tempStoreAlgo = "";
 
     @Override
@@ -58,15 +42,8 @@ public class MainActivity extends BaseActivity{
         final View rootView = inflater.inflate(R.layout.fragment_1, container, false);
         EditText algoSave = (EditText)rootView.findViewById(R.id.algo_save);
         EditText testTextSave = (EditText)rootView.findViewById(R.id.test_text_save);
-        if(DatabaseUtils.isEntryAvailable(getApplicationContext())) {
-            tempStoreAlgo = DatabaseUtils.getAlgoFromDb(null, getApplicationContext());
-            algoSave.setText(tempStoreAlgo);
-
-        }else{
-            tempStoreAlgo = DEFAULT_ALGO;
-            algoSave.setText(tempStoreAlgo);
-            DatabaseUtils.insertAlgoToDb(null, tempStoreAlgo, getApplicationContext());
-        }
+        tempStoreAlgo = DatabaseUtils.getAlgoFromDb(null, getApplicationContext());
+        algoSave.setText(tempStoreAlgo);
         testTextSave.setText("Test plain text");
         Button runTest = (Button)rootView.findViewById(R.id.run_test);
         runTest.setOnClickListener(new View.OnClickListener() {
@@ -82,18 +59,17 @@ public class MainActivity extends BaseActivity{
                 //Log.i("rajumoh", "Evaluating EncDecTest : " + shell.evaluate(algoSave.getText()+"\ntestString = \""+testTextSave.getText()+"\"\n"+encDecTest).getResult());
                 String response = shell.evaluate(algoSave.getText() + "\ntestString = \"" + testTextSave.getText() + "\"\n" + encDecTest).getResult();
                 if (response.equals(testTextSave.getText().toString())) {
-                    //TODO : Test the clipbard code.
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("message", shell.evaluate(algoSave.getText() + "\ntestString = \"" + testTextSave.getText() + "\"\n" + encryptTest).getResult());
+                    ClipData clip = ClipData.newPlainText("message", "$$" + shell.evaluate(algoSave.getText() + "\ntestString = \"" + testTextSave.getText() + "\"\n" + encryptTest).getResult());
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(getApplicationContext(), "Test Success.Message copied to clipboard", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Test Failed. Your Crypt does not seem to be working", Toast.LENGTH_LONG).show();
                 }
 
-                if(!tempStoreAlgo.equals(algoSave.getText().toString())) {
+                if (!tempStoreAlgo.equals(algoSave.getText().toString())) {
                     Log.i("rajumoh", "There was some change in the algo, saving new algo");
-                    if(DatabaseUtils.updateAlgoToDb(null, algoSave.getText().toString(), getApplicationContext()))
+                    if (DatabaseUtils.updateAlgoToDb(null, algoSave.getText().toString(), getApplicationContext()))
                         Log.i("rajumoh", "Algo Successfully saved");
                     else
                         Log.e("rajumoh", "Failed to save the algo to database.");

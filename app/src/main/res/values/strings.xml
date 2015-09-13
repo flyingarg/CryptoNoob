@@ -9,12 +9,12 @@
         <string name="s_algo_save_hint">Write your Algo and Save</string>
         <string name="s_test_text">Test Text</string>
         <string name="s_test_text_hint">Enter Test Text to check Algo validity</string>
+        <string name="s_contact_test">Message</string>
+    <string name="s_message_test">Message</string>
 
-    <!-- Strings related to fragment_2 -->
     <string name="title_section2">NFC Initiate</string>
-
-    <!-- Strings related to fragment_3 -->
     <string name="title_section3">NFC Respond</string>
+    <string name="title_section4">Messages</string>
 
     <!-- Some common Strings -->
     <string name="s_save">Save</string>

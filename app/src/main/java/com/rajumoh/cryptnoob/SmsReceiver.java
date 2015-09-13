@@ -1,8 +1,12 @@
 package com.rajumoh.cryptnoob;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -17,24 +21,40 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("rajumoh", "Got a SMS Message");
         SmsMessage msgs[] = getMessagesFromIntent(intent);
-        String address, str = "";
-        int contactId = -1;
+        String message_contact = "";
+        String message_content = "";
         if (msgs != null) {
-            for (int i = 0; i < msgs.length; i++) {
-                address = msgs[i].getOriginatingAddress();
-                Log.i("rajumoh", msgs[i].getDisplayOriginatingAddress());
-                Log.i("rajumoh", msgs[i].getMessageBody());
-                //contactId = ContactsUtils.getContactId(context, address, "address");
-                str += msgs[i].getMessageBody().toString();
-                str += "\n";
+            for (SmsMessage msg : msgs) {
+                message_contact = msg.getOriginatingAddress();
+                message_content += msg.getMessageBody();
             }
         }
-        if(str.startsWith("~~")){
-            String encDecTest = "decryptTest(encryptTest(testString));\n";
+        Log.i("rajumoh","Message received : '" + message_content + "'");
+        if(message_content.startsWith("$$")){
+            String message = message_content.substring(2);
+            Log.i("rajumoh", "Message : '" + message +"' selected for decryption");
+            String decryptMethod = "decryptTest(testString);\n";
             GrooidShell shell = new GrooidShell(context.getDir("dynclasses", 0), this.getClass().getClassLoader());
-            //TODO : Create an alert, or a better way to display message.
-            /*http://developer.android.com/guide/topics/ui/dialogs.html*/
-            String decryptedText = shell.evaluate(DatabaseUtils.getAlgoFromDb(null, context)+"\ntestString = \""+ str.substring(1)+"\"\n"+encDecTest).getResult();
+            String algo = DatabaseUtils.getAlgoFromDb(null, context);
+            String decryptedText = shell.evaluate(algo +"\ntestString = \""+ message +"\"\n"+decryptMethod).getResult();
+            Log.i("rajumoh", "Decrypted message : '" + decryptedText + "'. Saving to Database");
+
+            DatabaseUtils.saveMessage(context, message_contact, decryptedText);
+
+            Log.i("rajumoh", "Creating and sending notification");
+            Intent toIntent = new Intent(context, ActivityFour.class);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+            mBuilder.setContentTitle("New Encrypted Message");
+            mBuilder.setContentText(decryptedText);
+            mBuilder.setSmallIcon(R.drawable.ic_notification);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addParentStack(ActivityFour.class);
+            stackBuilder.addNextIntent(toIntent);
+            PendingIntent pendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0,mBuilder.build());
         }
     }
 

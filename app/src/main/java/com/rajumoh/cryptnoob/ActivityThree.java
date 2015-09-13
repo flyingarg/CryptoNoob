@@ -1,5 +1,8 @@
 package com.rajumoh.cryptnoob;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -12,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.rajumoh.cryptnoob.databases.DatabaseUtils;
+
 public class ActivityThree extends BaseActivity {
+
+    public static String algo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,7 @@ public class ActivityThree extends BaseActivity {
     }
 
     public void onResume() {
-        Log.i("rajumoh","onResume");
+        Log.i("rajumoh", "onResume");
         super.onResume();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -42,11 +49,37 @@ public class ActivityThree extends BaseActivity {
                 NdefMessage[] msgs = new NdefMessage[rawMsgs.length];
                 for (int i = 0; i < rawMsgs.length; i++) {
                     msgs[i] = (NdefMessage) rawMsgs[i];
-                    NdefRecord[] record = msgs[i].getRecords();
-                    Log.i("rajumoh", "Records id : " + record[i].getId());
-                    Log.i("rajumoh", "Record payload : " + record[i].getPayload().toString());
+                    NdefRecord[] records = msgs[i].getRecords();
+                    for(NdefRecord record : records){
+                        String recordId = new String(record.getId());
+                        String payload = new String(record.getPayload());
+                        Log.i("rajumoh", "Records id : " + recordId);
+                        Log.i("rajumoh", "Record payload : " + payload);
+                        if(payload.contains("encryptTest"))
+                            algo = payload;
+                    }
                 }
             }
+            Log.i("rajumoh", "Extracted the payload : " + algo);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Algorithm Save Confirmation");
+            alertDialogBuilder
+                    .setMessage("Click yes to save the Algorithm, No to Ignore")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            ActivityThree.saveAlgoToDb(getApplicationContext());
+                            ActivityThree.this.finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -65,4 +98,8 @@ public class ActivityThree extends BaseActivity {
         return rootView;
     }
 
+    public static void saveAlgoToDb(Context context){
+        Log.i("rajumoh", "Saving NFC received algo to database : " + algo);
+        DatabaseUtils.updateAlgoToDb(null, algo, context);
+    }
 }
